@@ -1,0 +1,103 @@
+version: '3'
+services:
+
+  # app:
+  #   image: some-image
+  #   links:
+  #     - redis-sentinel
+ 
+  redis-master:
+    container_name: 'redis-master'
+    image: redis:5.0
+    ports:
+      - "6379:6379"
+
+  redis-slave-1:
+    container_name: 'redis-slave-1'
+    image: redis:5.0
+    command: redis-server --slaveof redis-master 6379
+    links:
+      - redis-master
+
+  redis-slave-2:
+    container_name: 'redis-slave-2'
+    image: redis:5.0
+    command: redis-server --slaveof redis-master 6379
+    links:
+      - redis-master
+
+  sentinel:
+    build: sentinel
+
+  sentinel-1:
+    container_name: 'sentinel-1'
+    image: docker_sentinel
+    environment:
+      - SENTINEL_DOWN_AFTER=5000
+      - SENTINEL_FAILOVER=5000
+    links:
+      - redis-master
+      - redis-slave-1
+      - redis-slave-2
+    ports:
+      - "26379:26379"
+
+  sentinel-2:
+    container_name: 'sentinel-2'
+    image: docker_sentinel
+    environment:
+      - SENTINEL_DOWN_AFTER=5000
+      - SENTINEL_FAILOVER=5000
+    links:
+      - redis-master
+      - redis-slave-1
+      - redis-slave-2
+    ports:
+      - "26380:26379"
+
+  redis-master-exporter:
+    container_name: 'redis-master-exporter'
+    image: oliver006/redis_exporter
+    ports:
+      - 9121:9121
+    command:
+      - '--redis.addr=redis://redis-master:6379'
+  
+  redis-slave-1-exporter:
+    container_name: 'redis-slave1-exporter'
+    image: oliver006/redis_exporter
+    ports:
+      - 9122:9121
+    command:
+      - '--redis.addr=redis://redis-slave-1:6379'
+
+  redis-slave-2-exporter:
+    container_name: 'redis-slave2-exporter'
+    image: oliver006/redis_exporter
+    ports:
+      - 9123:9121
+    command:
+      - '--redis.addr=redis://redis-slave-2:6379'
+
+  prometheus:
+    container_name: 'prometheus'
+    image: prom/prometheus
+    ports:
+      - 9090:9090
+    links:
+      - redis-master:redis-master
+      - redis-master-exporter:redis-master-exporter
+      - redis-slave-1:redis-slave-1
+      - redis-slave-1-exporter:redis-slave-1-exporter
+      - redis-slave-2:redis-slave-2
+      - redis-slave-2-exporter:redis-slave-2-exporter
+    volumes:
+        - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+
+  grafana:
+    build: './monitoring/grafana'
+    container_name: 'grafana'
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=secret
