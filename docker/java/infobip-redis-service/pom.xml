@@ -12,6 +12,7 @@
 	<groupId>com.mkern</groupId>
 	<artifactId>infobip-redis-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
 	<name>infobip-redis-service</name>
 	<description>Service for redis CRUD</description>
 
@@ -63,6 +64,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+		<finalName>${project.artifactId}</finalName>
 	</build>
 
 </project>

@@ -10,8 +10,8 @@ spring:
     port: 6379
 redis:
     sentinel:
-        host-ports: sentinel-1:26379; sentinel-2:26379
+        host-ports: sentinel-1:26379;sentinel-2:26379
         master:
             name: mymaster
 
-runonwindows: true            
+runstandalone: false            

@@ -25,13 +25,10 @@ services:
     command: redis-server --slaveof redis-master 6379
     links:
       - redis-master
-
-  sentinel:
-    build: sentinel
-
+  
   sentinel-1:
     container_name: 'sentinel-1'
-    image: docker_sentinel
+    build: sentinel
     environment:
       - SENTINEL_DOWN_AFTER=5000
       - SENTINEL_FAILOVER=5000
@@ -39,12 +36,12 @@ services:
       - redis-master
       - redis-slave-1
       - redis-slave-2
-    ports:
-      - "26379:26379"
+    # ports:
+    #   - "26379:26379"
 
   sentinel-2:
     container_name: 'sentinel-2'
-    image: docker_sentinel
+    build: sentinel
     environment:
       - SENTINEL_DOWN_AFTER=5000
       - SENTINEL_FAILOVER=5000
@@ -52,8 +49,8 @@ services:
       - redis-master
       - redis-slave-1
       - redis-slave-2
-    ports:
-      - "26380:26379"
+    # ports:
+    #   - "26380:26379"
 
   redis-master-exporter:
     container_name: 'redis-master-exporter'
@@ -101,3 +98,12 @@ services:
       - "3000:3000"
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=secret
+
+  infobip-redis-service:
+    build: './java/infobip-redis-service'
+    container_name: 'infobip-redis-service'
+    ports:
+      - "8080:8080"
+    links:
+      - sentinel-1
+      - sentinel-2

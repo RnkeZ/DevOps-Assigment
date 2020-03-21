@@ -16,7 +16,7 @@ import redis.clients.jedis.JedisPoolConfig;
 @Configuration
 public class RedisConfig {
 	@Bean
-	@ConditionalOnProperty(name = "runonwindows", havingValue = "true", matchIfMissing = false)
+	@ConditionalOnProperty(name = "runstandalone", havingValue = "true", matchIfMissing = false)
 	JedisConnectionFactory jedisConnectionFactoryLocal() {
 		RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration("localhost", 6379);
 		return new JedisConnectionFactory(redisStandaloneConfiguration);
@@ -30,7 +30,7 @@ public class RedisConfig {
 
 	@Bean
 
-	@ConditionalOnProperty(name = "runonwindows", havingValue = "false", matchIfMissing = true)
+	@ConditionalOnProperty(name = "runstandalone", havingValue = "false", matchIfMissing = true)
 	public RedisTemplate<Object, Object> redisTemplate() {
 		RedisTemplate<Object, Object> template = new RedisTemplate<>();
 		template.setConnectionFactory(jedisConnectionFactory());
@@ -38,7 +38,7 @@ public class RedisConfig {
 	}
 
 	@Bean(name = "jedisConnectionFactory")
-	@ConditionalOnProperty(name = "runonwindows", havingValue = "false", matchIfMissing = true)
+	@ConditionalOnProperty(name = "runstandalone", havingValue = "false", matchIfMissing = true)
 	public JedisConnectionFactory jedisConnectionFactory() {
 		RedisSentinelConfiguration redisSentinelConfiguration = new RedisSentinelConfiguration();
 		redisSentinelConfiguration.master(redismaster);
@@ -63,7 +63,7 @@ public class RedisConfig {
 	}
 
 	@Bean
-	@ConditionalOnProperty(name = "runonwindows", havingValue = "false", matchIfMissing = true)
+	@ConditionalOnProperty(name = "runstandalone", havingValue = "false", matchIfMissing = true)
 	public JedisPoolConfig poolConfig() {
 		final JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
 		jedisPoolConfig.setTestOnBorrow(true);
