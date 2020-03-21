@@ -1,11 +1,6 @@
 version: '3'
 services:
 
-  # app:
-  #   image: some-image
-  #   links:
-  #     - redis-sentinel
- 
   redis-master:
     container_name: 'redis-master'
     image: redis:5.0
@@ -36,8 +31,6 @@ services:
       - redis-master
       - redis-slave-1
       - redis-slave-2
-    # ports:
-    #   - "26379:26379"
 
   sentinel-2:
     container_name: 'sentinel-2'
@@ -49,8 +42,6 @@ services:
       - redis-master
       - redis-slave-1
       - redis-slave-2
-    # ports:
-    #   - "26380:26379"
 
   redis-master-exporter:
     container_name: 'redis-master-exporter'
