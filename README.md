@@ -55,10 +55,10 @@ docker-compose up
 
 ## Usage
 
-Check Grafana for Redis metrics using this [link](http://locahost:3000).
+Check Grafana for Redis metrics using this [link](http://localhost:3000).
 
 To access Grafana use username `admin` and password `secret`. Password can be configured in grafana service section in docker-compose.yml.
 
-For interaction with Redis Client go to this [Swagger UI link](http://locahost:3000/swagger-ui.html). 
+For interaction with Redis Client go to this [Swagger UI link](http://localhost:3000/swagger-ui.html). 
 
 
