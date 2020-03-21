@@ -6,6 +6,8 @@ Java client comunicates with Redis Sentinels to get the location of Redis Master
 
 For monitoring of the stack we use [Prometheus](https://prometheus.io/) server that scrapes metrics from Redis exporters. Visualization of the metrics is done using [Grafana](https://grafana.com/). Grafana instance comes with preconfigured datasource and [Redis Dashboard](https://grafana.com/grafana/dashboards/763)
 
+### Component Overview
+
 | Component          | Image                                    | Instances  |
 | -------------------|:----------------------------------------:| ----------:|
 | Redis              | `redis:5.0`                              |     3      |
