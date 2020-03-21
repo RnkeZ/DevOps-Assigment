@@ -21,3 +21,7 @@ Deploy stack using [docker-compose](https://docs.docker.com/compose/)
 ```bash
 docker-compose up
 ```
+
+## Architecture
+
+Deployed stack consits of 3 Redis instances, 2 Sentinels, 3 Redis exportes, Prometheus, Grafana and Java Redis client.
