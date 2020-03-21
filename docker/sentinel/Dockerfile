@@ -1,4 +1,4 @@
-FROM redis:5
+FROM redis:5.0
 
 ADD sentinel.conf /etc/redis/sentinel.conf
 RUN chown redis:redis /etc/redis/sentinel.conf
