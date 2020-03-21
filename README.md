@@ -1,10 +1,10 @@
 # DevOps-Assigment
 
-Deployed stack consits of three Redis instances, two Redis Sentinels, three Redis exporters, Prometheus, Grafana and Java Redis client.
+Deployed stack consists of three Redis instances, two Redis Sentinels, three Redis exporters, Prometheus, Grafana and Java Redis client.
 
-Java client comunicates with Redis Sentinels to get the location of Redis Master instance. In case Redis Master goes down failover will happen and one of the other two instances will become the new master. 
+Java client communicates with Redis Sentinels to get the location of Redis Master instance. In case Redis Master goes down failover will happen and one of the other two instances will become the new master. 
 
-For monitoring of the stack we use [Prometheus](https://prometheus.io/) server that scrapes metrics from Redis exporters. Visualization of the metrics is done using [Grafana](https://grafana.com/). Grafana instance comes with preconfigured datasource and [Redis Dashboard](https://grafana.com/grafana/dashboards/763)
+To monitor the stack we use [Prometheus](https://prometheus.io/) server that scrapes metrics from Redis exporters. Visualization of the metrics is done using [Grafana](https://grafana.com/). Grafana instance comes with preconfigured datasource and [Redis Dashboard](https://grafana.com/grafana/dashboards/763).
 
 ### Component Overview
 
@@ -30,7 +30,7 @@ For monitoring of the stack we use [Prometheus](https://prometheus.io/) server t
 Use [Maven](https://maven.apache.org/) to build Java Redis Client.
 
 ```bash
-mvn -f .\java\infobip-redis-service\pom.xml package -DskipTests=true
+mvn -f .\docker\java\infobip-redis-service\pom.xml package -DskipTests=true
 ```
 
 Build Docker images using [docker-compose](https://docs.docker.com/compose/).
@@ -59,6 +59,6 @@ Check Grafana for Redis metrics using this [link](http://locahost:3000).
 
 To access Grafana use username `admin` and password `secret`. Password can be configured in grafana service section in docker-compose.yml.
 
-For interaction with Redis Client go to this [link](http://locahost:3000/swagger-ui.html).
+For interaction with Redis Client go to this [Swagger UI link](http://locahost:3000/swagger-ui.html). 
 
 
