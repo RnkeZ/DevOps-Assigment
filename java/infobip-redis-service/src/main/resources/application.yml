@@ -1,0 +1,17 @@
+debug: false
+server:
+  port: 8080
+  servlet:
+    context-path: /
+spring:
+  redis:
+    host: 127.0.0.1
+    password: password
+    port: 6379
+redis:
+    sentinel:
+        host-ports: sentinel-1:26379; sentinel-2:26379
+        master:
+            name: mymaster
+
+runonwindows: true            
