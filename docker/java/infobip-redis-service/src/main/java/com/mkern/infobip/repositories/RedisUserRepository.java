@@ -21,8 +21,9 @@ public class RedisUserRepository {
 		this.hashOperations = this.redisTemplate.opsForHash();
 	}
 
-	public void save(User user) {
+	public User save(User user) {
 		hashOperations.put("USER", user.getId(), user);
+		return user;
 	}
 
 	public List<User> findAll() {

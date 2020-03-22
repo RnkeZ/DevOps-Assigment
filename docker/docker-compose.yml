@@ -10,6 +10,8 @@ services:
   redis-slave-1:
     container_name: 'redis-slave-1'
     image: redis:5.0
+    depends_on:
+      - redis-master
     command: redis-server --slaveof redis-master 6379
     links:
       - redis-master
@@ -17,6 +19,8 @@ services:
   redis-slave-2:
     container_name: 'redis-slave-2'
     image: redis:5.0
+    depends_on:
+      - redis-master
     command: redis-server --slaveof redis-master 6379
     links:
       - redis-master
@@ -24,6 +28,10 @@ services:
   sentinel-1:
     container_name: 'sentinel-1'
     build: sentinel
+    depends_on:
+      - redis-master
+      - redis-slave-1
+      - redis-slave-2
     environment:
       - SENTINEL_DOWN_AFTER=5000
       - SENTINEL_FAILOVER=5000
@@ -35,6 +43,10 @@ services:
   sentinel-2:
     container_name: 'sentinel-2'
     build: sentinel
+    depends_on:
+      - redis-master
+      - redis-slave-1
+      - redis-slave-2
     environment:
       - SENTINEL_DOWN_AFTER=5000
       - SENTINEL_FAILOVER=5000
@@ -46,6 +58,8 @@ services:
   redis-master-exporter:
     container_name: 'redis-master-exporter'
     image: oliver006/redis_exporter:v1.5.2-alpine
+    depends_on:
+      - redis-master
     ports:
       - 9121:9121
     command:
@@ -54,6 +68,8 @@ services:
   redis-slave-1-exporter:
     container_name: 'redis-slave1-exporter'
     image: oliver006/redis_exporter:v1.5.2-alpine
+    depends_on:
+      - redis-slave-1
     ports:
       - 9122:9121
     command:
@@ -62,6 +78,8 @@ services:
   redis-slave-2-exporter:
     container_name: 'redis-slave2-exporter'
     image: oliver006/redis_exporter:v1.5.2-alpine
+    depends_on:
+      - redis-slave-2
     ports:
       - 9123:9121
     command:
@@ -70,21 +88,27 @@ services:
   prometheus:
     container_name: 'prometheus'
     image: prom/prometheus:v2.16.0
+    depends_on:
+      - redis-master-exporter
+      - redis-slave-1-exporter
+      - redis-slave-2-exporter
     ports:
       - 9090:9090
     links:
-      - redis-master:redis-master
-      - redis-master-exporter:redis-master-exporter
-      - redis-slave-1:redis-slave-1
-      - redis-slave-1-exporter:redis-slave-1-exporter
-      - redis-slave-2:redis-slave-2
-      - redis-slave-2-exporter:redis-slave-2-exporter
+      - redis-master
+      - redis-master-exporter
+      - redis-slave-1
+      - redis-slave-1-exporter
+      - redis-slave-2
+      - redis-slave-2-exporter
     volumes:
         - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
 
   grafana:
     build: './monitoring/grafana'
     container_name: 'grafana'
+    depends_on:
+      - prometheus
     ports:
       - "3000:3000"
     environment:
@@ -93,6 +117,8 @@ services:
   infobip-redis-service:
     build: './java/infobip-redis-service'
     container_name: 'infobip-redis-service'
+    depends_on:
+      - redis-master
     ports:
       - "8080:8080"
     links:

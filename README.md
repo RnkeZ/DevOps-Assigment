@@ -30,19 +30,27 @@ To monitor the stack we use [Prometheus](https://prometheus.io/) server that scr
 Use [Maven](https://maven.apache.org/) to build Java Redis Client.
 
 ```bash
-mvn -f .\docker\java\infobip-redis-service\pom.xml package -DskipTests=true
+mvn -f .\docker\java\infobip-redis-service\pom.xml package
 ```
 
 Build Docker images using [docker-compose](https://docs.docker.com/compose/).
 
 ```bash
-docker-compose build
+docker-compose -f .\docker\docker-compose.yml build
 ```
 
 Pull all required images using [docker-compose](https://docs.docker.com/compose/).
 
 ```bash
-docker-compose pull
+docker-compose -f .\docker\docker-compose.yml pull
+```
+
+## Test
+
+To test Java Redis Client run integration tests using [Maven](https://maven.apache.org/).
+
+```bash
+mvn -f .\docker\java\infobip-redis-service\pom.xml test
 ```
 
 ## Deployment
@@ -50,7 +58,13 @@ docker-compose pull
 Deploy stack using [docker-compose](https://docs.docker.com/compose/).
 
 ```bash
-docker-compose up
+docker-compose -f .\docker\docker-compose.yml up
+```
+
+To run docker containers in detached mode:
+
+```bash
+docker-compose -f .\docker\docker-compose.yml up -d
 ```
 
 ## Usage
@@ -58,6 +72,7 @@ docker-compose up
 Check Grafana for Redis metrics using this [link](http://locahost:3000).
 
 To access Grafana use username `admin` and password `secret`. Password can be configured in grafana service section in docker-compose.yml.
+Redis dashboard can be found in `General` folder.
 
 For interaction with Redis Client go to this [Swagger UI link](http://locahost:3000/swagger-ui.html). 
 
