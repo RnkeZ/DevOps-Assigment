@@ -11,7 +11,7 @@ To monitor the stack we use [Prometheus](https://prometheus.io/) server that scr
 | Component          | Image                                    | Instances  |
 | -------------------|:----------------------------------------:| ----------:|
 | Redis              | `redis:5.0`                              |     3      |
-| Redis Sentinels    | `redis:5.0`                              |     2      |
+| Redis Sentinel     | `redis:5.0`                              |     2      |
 | Redis exporter     | `oliver006/redis_exporter:v1.5.2-alpine` |     3      |
 | Java Redis client  | `openjdk:8-slim`                         |     1      |
 | Prometheus         | `prom/prometheus:v2.16.0`                |     1      |
